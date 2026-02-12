@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - MyWalletApplication",
+            "request": "launch",
+            "mainClass": "com.mywallet.MyWalletApplication",
+            "projectName": "my-wallet",
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "dev"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Debug (Attach)",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 5005
+        }
+    ]
+}
