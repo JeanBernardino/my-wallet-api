@@ -5,6 +5,7 @@ import com.mywallet.dto.UsuarioResponse;
 import com.mywallet.entity.user.UserEntity;
 import com.mywallet.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UsuarioResponse criar(UsuarioRequest request) {
@@ -30,7 +32,7 @@ public class UserService {
                 .name(request.getName())
                 .username(request.getUsername())
                 .email(request.getEmail())
-                .password(request.getPassword()) // TODO: Criptografar senha
+                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
         UserEntity saved = usuarioRepository.save(usuario);
@@ -69,7 +71,7 @@ public class UserService {
         usuario.setUsername(request.getUsername());
         usuario.setEmail(request.getEmail());
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            usuario.setPassword(request.getPassword()); // TODO: Criptografar senha
+            usuario.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
         UserEntity updated = usuarioRepository.save(usuario);
