@@ -8,10 +8,10 @@ CREATE TABLE appuser (
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     "password" VARCHAR(255) NOT NULL,
-    inclusao_data TIMESTAMP NOT NULL,
-    inclusao_usuario_id BIGINT,
-    alteracao_data TIMESTAMP,
-    alteracao_usuario_id BIGINT
+    created_at TIMESTAMP NOT NULL,
+    created_by BIGINT,
+    updated_at TIMESTAMP,
+    updated_by BIGINT
 );
 
 CREATE INDEX idx_appuser_username ON appuser(username);

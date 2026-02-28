@@ -3,9 +3,9 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Debug (Launch) - MyWalletApplication",
+            "name": "Debug (Launch) - Application",
             "request": "launch",
-            "mainClass": "com.mywallet.MyWalletApplication",
+            "mainClass": "com.mywallet.Application",
             "projectName": "my-wallet",
             "env": {
                 "SPRING_PROFILES_ACTIVE": "dev"

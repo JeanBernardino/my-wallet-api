@@ -15,25 +15,25 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "inclusao_data", nullable = false, updatable = false)
-    private LocalDateTime inclusaoData;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    @Column(name = "inclusao_usuario_id", updatable = false)
-    private Long inclusaoUsuarioId;
+    @Column(name = "created_by", updatable = false)
+    private Long createdBy;
 
-    @Column(name = "alteracao_data")
-    private LocalDateTime alteracaoData;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
-    @Column(name = "alteracao_usuario_id")
-    private Long alteracaoUsuarioId;
+    @Column(name = "updated_by")
+    private Long updatedBy;
 
     @PrePersist
     protected void onCreate() {
-        inclusaoData = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        alteracaoData = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 }
