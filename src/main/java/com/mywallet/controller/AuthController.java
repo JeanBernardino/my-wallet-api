@@ -39,7 +39,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(request.getUsername());
         String token = this.authService.generateToken(userDetails);
 
         LoginResponse response = LoginResponse.builder()
