@@ -1,11 +1,12 @@
 package com.mywallet.controller;
 
-import com.mywallet.dto.UsuarioRequest;
-import com.mywallet.dto.UsuarioResponse;
-import com.mywallet.service.UserService;
+import com.mywallet.dto.ApiResponse;
+import com.mywallet.dto.user.UserRequest;
+import com.mywallet.dto.user.UserResponse;
+import com.mywallet.service.user.UserService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Tag(name = "Usuários", description = "Gerenciamento de usuários")
 public class UserController {
@@ -27,56 +28,55 @@ public class UserController {
     @PostMapping
     @Operation(summary = "Criar novo usuário", description = "Cria um novo usuário no sistema")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário/email já existe")
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Usuário criado com sucesso"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário/email já existe")
     })
-    public ResponseEntity<UsuarioResponse> criar(@Valid @RequestBody UsuarioRequest request) {
-        UsuarioResponse response = usuarioService.criar(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<ApiResponse<UserResponse>> create(@Valid @RequestBody UserRequest request) {
+        UserResponse response = this.usuarioService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
+    }
+
+    @GetMapping
+    @Operation(summary = "Listar todos os usuários", description = "Retorna uma lista com todos os usuários cadastrados")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> findAll() {
+        List<UserResponse> response = this.usuarioService.findAll();
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar usuário por ID", description = "Retorna um usuário específico pelo seu ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
-        @ApiResponse(responseCode = "400", description = "Usuário não encontrado")
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Usuário encontrado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Usuário não encontrado")
     })
-    public ResponseEntity<UsuarioResponse> buscarPorId(
-            @Parameter(description = "ID do usuário") @PathVariable Long id) {
-        UsuarioResponse response = usuarioService.buscarPorId(id);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping
-    @Operation(summary = "Listar todos os usuários", description = "Retorna uma lista com todos os usuários cadastrados")
-    @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
-    public ResponseEntity<List<UsuarioResponse>> listarTodos() {
-        List<UsuarioResponse> response = usuarioService.listarTodos();
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ApiResponse<UserResponse>> findById(@Parameter(description = "ID do usuário") @PathVariable Long id) {
+        UserResponse response = this.usuarioService.findById(id);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário existente")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário não encontrado")
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário não encontrado")
     })
-    public ResponseEntity<UsuarioResponse> atualizar(
-            @Parameter(description = "ID do usuário") @PathVariable Long id,
-            @Valid @RequestBody UsuarioRequest request) {
-        UsuarioResponse response = usuarioService.atualizar(id, request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ApiResponse<UserResponse>> update(
+        @Parameter(description = "ID do usuário") @PathVariable Long id,
+        @Valid @RequestBody UserRequest request
+    ) {
+        UserResponse response = this.usuarioService.update(id, request);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar usuário", description = "Remove um usuário do sistema")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Usuário não encontrado")
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Usuário não encontrado")
     })
-    public ResponseEntity<Void> deletar(
-            @Parameter(description = "ID do usuário") @PathVariable Long id) {
-        usuarioService.deletar(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ApiResponse<Void>> delete(@Parameter(description = "ID do usuário") @PathVariable Long id) {
+        this.usuarioService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));
     }
 }
